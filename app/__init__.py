@@ -20,9 +20,11 @@ def create_app():
     from .routes.inventory import inventory_bp
     from .routes.orders import orders_bp
     from .routes.products import products_bp
+    from .routes.users import users_bp
 
     app.register_blueprint(inventory_bp)
     app.register_blueprint(orders_bp)
     app.register_blueprint(products_bp)
+    app.register_blueprint(users_bp)
 
     return app
