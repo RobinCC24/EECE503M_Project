@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Upload Products</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <h1>Bulk Upload Products</h1>
+
+    <!-- Instructions for the user -->
+    <p>Upload a CSV file to add products in bulk to the system. The CSV should contain the following columns:</p>
+    <ul>
+        <li><strong>name</strong> - The name of the product</li>
+        <li><strong>description</strong> - A brief description of the product (optional)</li>
+        <li><strong>price</strong> - The price of the product</li>
+        <li><strong>subcategory_name</strong> - The name of the subcategory for the product</li>
+        <li><strong>specifications</strong> - Additional specifications (optional)</li>
+        <li><strong>discount</strong> - The discount value for the product (optional)</li>
+    </ul>
+
+    <!-- Bulk upload form -->
+    <form action="{{ url_for('products.bulk_upload_products') }}" method="POST" enctype="multipart/form-data">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label for="file">Select CSV File:</label>
+        <input type="file" name="file" id="file" accept=".csv" required>
+
+        <br><br>
+
+        <button type="submit">Upload CSV</button>
+    </form>
+
+    <!-- Display error or success messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <ul class="flash-messages">
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+
+</body>
+</html>
