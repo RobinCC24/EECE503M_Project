@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, redirect, render_template, request, jsonify, url_for
 from app import db
 from app.models import Category, Product, Inventory, Subcategory, Warehouse
 
@@ -7,36 +7,43 @@ inventory_bp = Blueprint('inventory', __name__)
 @inventory_bp.route('/inventory', methods=['GET'])
 def get_inventory():
   all_inventory = Inventory.query.all()
+  products = Product.query.all()
+  warehouses = Warehouse.query.all()
   inventory_data = []
   for item in all_inventory:
     inventory_data.append({"product": item.product.name,
                            "warehouse": item.warehouse.location,
                            "quantity": item.quantity})
-  return jsonify(inventory_data)
+  return render_template('inventory.html',products=products, warehouses=warehouses, inventory_data=inventory_data)
 
-@inventory_bp.route('/inventory/product/<int:product_id>', methods=['GET'])
-def get_inventory_by_product(product_id):
-    inventory_data = Inventory.query.filter_by(product_id=product_id).all()
-    if not inventory_data:
-        return jsonify({"error": "No inventory entries found for this product"}), 404
+@inventory_bp.route('/inventory/filter', methods=['GET'])
+def filter_inventory():
+    product_id = request.args.get('product_id')
+    warehouse_id = request.args.get('warehouse_id')
 
-    inventory_list = []
-    for item in inventory_data:
-        inventory_list.append({"warehouse": item.warehouse.location,
-                               "quantity": item.quantity})
-    return jsonify(inventory_list)
+    query = Inventory.query
+    if product_id:
+        query = query.filter_by(product_id=product_id)
+    if warehouse_id:
+        query = query.filter_by(warehouse_id=warehouse_id)
+    
+    filtered_inventory = query.all()
+    filtered_data = []
+    for item in filtered_inventory:
+        filtered_data.append({
+            "product": item.product.name,
+            "warehouse": item.warehouse.location,
+            "quantity": item.quantity
+        })
+    
+    return jsonify({"inventory": filtered_data})
 
-@inventory_bp.route('/inventory/warehouse/<int:warehouse_id>', methods=['GET'])
-def get_inventory_by_warehouse(warehouse_id):
-    inventory_data = Inventory.query.filter_by(warehouse_id=warehouse_id).all()
-    if not inventory_data:
-        return jsonify({"error": "No inventory entries found for this warehouse"}), 404
+@inventory_bp.route('/inventory/add', methods=['GET'])
+def add_inventory_form():
+  products = Product.query.all()  
+  warehouses = Warehouse.query.all()
 
-    inventory_list = []
-    for item in inventory_data:
-        inventory_list.append({"product": item.product.name,
-                               "quantity": item.quantity})
-    return jsonify(inventory_list)
+  return render_template('add_inventory.html', products=products, warehouses=warehouses)
 
 
 @inventory_bp.route('/inventory/add', methods=['POST'])
@@ -56,15 +63,15 @@ def add_inventory_entry():
    quantity = int(data['quantity'])
    existing_inventory.quantity += quantity
    db.session.commit()
-   return jsonify({"message": "Inventory updated successfully"}), 200
+   return redirect(url_for('inventory.get_inventory')) 
   
   new_inventory = Inventory(product_id=product_id, warehouse_id=warehouse_id, quantity=quantity)
   db.session.add(new_inventory)
   db.session.commit()
 
-  return jsonify({"message":"Inventory entry added successfully"}), 201
+  return redirect(url_for('inventory.get_inventory')) 
 
-@inventory_bp.route('/inventory/<int:product_id>/<int:warehouse_id>/update', methods=['PUT'])
+"""@inventory_bp.route('/inventory/<int:product_id>/<int:warehouse_id>/update', methods=['PUT'])
 def update_inventory(product_id, warehouse_id):
   data = request.form
   quantity_change = data.get('quantity_change')
@@ -79,7 +86,7 @@ def update_inventory(product_id, warehouse_id):
       return jsonify({"alert": f"Low stock alert for {inventory.product.name} in {inventory.warehouse.location}!"})
     
     return jsonify({"message": "Inventory updated successfully"})
-  return jsonify({"error": "Inventory record not found"})
+  return jsonify({"error": "Inventory record not found"})"""
 
 @inventory_bp.route('/inventory/report', methods=['GET'])
 def generate_report():
@@ -89,7 +96,11 @@ def generate_report():
   report = {"category_summary": [{"category": c.name, "total_stock": c.total_stock} for c in category_report],
             "top_products": [{"product": p.name, "stock": p.total_stock} for p in popular_products]}
   
-  return jsonify(report)
+  return render_template('report.html', report=report)
+
+@inventory_bp.route('/categories', methods=['GET'])
+def show_add_category_form():
+    return render_template('add_category.html')
 
 @inventory_bp.route('/categories', methods=['POST'])
 def add_category():
@@ -97,7 +108,12 @@ def add_category():
   category = Category(name=data['name'])
   db.session.add(category)
   db.session.commit()
-  return jsonify({"message": "Category added successfully"}), 201
+  return redirect(url_for('inventory.get_inventory'))
+
+@inventory_bp.route('/subcategories', methods=['GET'])
+def show_add_subcategory_form():
+    categories = Category.query.all() 
+    return render_template('add_subcategory.html', categories=categories)
 
 @inventory_bp.route('/subcategories', methods=['POST'])
 def add_subcategory():
@@ -111,7 +127,11 @@ def add_subcategory():
   subcategory = Subcategory(name=data['name'], category_id=category.id)
   db.session.add(subcategory)
   db.session.commit()
-  return jsonify({"message": "Subcategory added successfully"}), 201
+  return redirect(url_for('inventory.get_inventory'))
+
+@inventory_bp.route('/warehouses', methods=['GET'])
+def show_add_warehouse_form():
+    return render_template('add_warehouse.html')
 
 @inventory_bp.route('/warehouses', methods=['POST'])
 def create_warehouse():
@@ -119,7 +139,7 @@ def create_warehouse():
     warehouse = Warehouse(location=data['location'])
     db.session.add(warehouse)
     db.session.commit()
-    return jsonify({"message": "Warehouse created successfully", "warehouse_id": warehouse.id}), 201
+    return redirect(url_for('inventory.get_inventory'))
 
 @inventory_bp.route('/warehouses/<int:warehouse_id>', methods=['GET'])
 def get_warehouse(warehouse_id):

@@ -1,20 +1,25 @@
-from flask import Flask, app, render_template
+from flask import Flask, app, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from flask_wtf import CSRFProtect
 #from flask_login import LoginManager
 from config import Config
+from flask_migrate import Migrate
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
+migrate = Migrate()
 #login_manager = LoginManager()
 #login_manager.login_view = 'login'
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
+    csrf = CSRFProtect(app)
     
     db.init_app(app)
     bcrypt.init_app(app)
+    migrate.init_app(app, db)
     #login_manager.init_app(app)
     
     from .routes.inventory import inventory_bp
@@ -34,10 +39,6 @@ def create_app():
 
     @app.route('/')
     def index():
-        return render_template('index.html')
-
-    @app.route('/products.html')
-    def add_product_page():
-        return render_template('products.html')
+        return 'Welcome!'
 
     return app

@@ -6,10 +6,13 @@ class Product(db.Model):
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=True)
     price = db.Column(db.Float, nullable=False)
-    subcategory_id = db.Column(db.Integer, db.ForeignKey('subcategory.id'), nullable=True)
+    subcategory_id = db.Column(db.Integer, db.ForeignKey('subcategory.id', name='fk1'), nullable=True)
     image_url = db.Column(db.String(200), nullable=True)
     specifications = db.Column(db.Text, nullable=True)
     discount = db.Column(db.Float, default=0.0) 
+
+
+
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -19,7 +22,7 @@ class Category(db.Model):
 class Subcategory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id', name='fk2'), nullable=False)
     products = db.relationship('Product', backref='subcategory', lazy=True)
 
 class Warehouse(db.Model):
@@ -29,8 +32,8 @@ class Warehouse(db.Model):
 
 class Inventory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
-    warehouse_id = db.Column(db.Integer, db.ForeignKey('warehouse.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id', name='fk3', ondelete='CASCADE'), nullable=False)
+    warehouse_id = db.Column(db.Integer, db.ForeignKey('warehouse.id', name='fk4'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False, default=0)
     product = db.relationship('Product', backref=db.backref('inventory_records', lazy=True))
 
@@ -53,7 +56,7 @@ class Customer(db.Model):
 class Order(db.Model):
     __tablename__ = 'orders'
     id = db.Column(db.Integer, primary_key=True)
-    customer_id = db.Column(db.Integer, db.ForeignKey('customers.id'), nullable=False)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customers.id', name='fk5'), nullable=False)
     product_id = db.Column(db.Integer, nullable=False)
     status = db.Column(db.String(20), nullable=False, default='pending')
     quantity = db.Column(db.Integer, nullable=False)

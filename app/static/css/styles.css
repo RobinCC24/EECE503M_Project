@@ -1,0 +1,385 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  padding: 20px;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #444;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+table thead {
+  background-color: #007BFF;
+  color: #fff;
+}
+
+table th,
+table td {
+  padding: 12px 15px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+table th {
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+table tr:hover {
+  background-color: #e9ecef;
+  cursor: pointer;
+}
+
+table td {
+  font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  table {
+      font-size: 12px;
+  }
+
+  table th,
+  table td {
+      padding: 10px;
+  }
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+/* Edit Button */
+button.edit-btn {
+  background-color: #4CAF50; /* Green */
+  color: white;
+}
+
+button.edit-btn:hover {
+  background-color: #45a049;
+  border-color: #388e3c;
+}
+
+/* Delete Button */
+button.delete-btn {
+  background-color: #f44336; /* Red */
+  color: white;
+}
+
+button.delete-btn:hover {
+  background-color: #e53935;
+  border-color: #d32f2f;
+}
+
+/* Save Changes Button */
+button.save-btn {
+  background-color: #2196F3; /* Blue */
+  color: white;
+}
+
+button.save-btn:hover {
+  background-color: #1976d2;
+  border-color: #1565c0;
+}
+
+/* Modal Buttons */
+button#confirmDelete {
+  background-color: #f44336; /* Red */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button#confirmDelete:hover {
+  background-color: #e53935;
+}
+
+button#cancelDelete {
+  background-color: #8e8e8e; /* Gray */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button#cancelDelete:hover {
+  background-color: #616161;
+}
+
+/* Additional modal styling */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding-top: 60px;
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 5% auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 400px;
+}
+
+.product-detail {
+  margin: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.product-detail h1 {
+  color: #333;
+  font-size: 2rem;
+}
+
+.product-info p {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+.product-image img {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  margin-top: 20px;
+}
+
+button.edit-btn {
+  background-color: #4CAF50;
+  color: white;
+}
+
+button.edit-btn:hover {
+  background-color: #45a049;
+}
+
+button.delete-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+button.delete-btn:hover {
+  background-color: #e53935;
+}
+
+/* General body styling */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Main container for the form */
+h1 {
+  text-align: center;
+  color: #333;
+  padding: 20px;
+  margin-top: 40px;
+}
+
+/* Styling the form */
+form {
+  background-color: #fff;
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Form inputs and labels */
+label {
+  font-size: 16px;
+  color: #333;
+  display: block;
+  margin-bottom: 8px;
+  margin-top: 12px;
+}
+
+input[type="text"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+textarea {
+  resize: vertical;
+  height: 120px;
+}
+
+/* Styling the submit button */
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin-top: 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 18px;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* Styling for file input */
+input[type="file"] {
+  padding: 8px;
+  font-size: 16px;
+}
+
+/* Styling for the dropdown */
+select {
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+select:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+/* Optional: Add spacing between form fields */
+input[type="text"], input[type="number"], textarea, select {
+  margin-bottom: 20px;
+}
+
+/* Optional: Improve error message visibility */
+.error {
+  color: red;
+  font-size: 14px;
+}
+
+/* Add Product Button Styling */
+.add-product-button {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.add-product-button button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-product-button button:hover {
+  background-color: #45a049;
+}
+
+/* Form Styling */
+form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+form label {
+  display: block;
+  margin: 10px 0 5px;
+}
+
+form input,
+form select,
+form textarea {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+form button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #45a049;
+}
+
+a {
+  text-decoration: none;
+  color: #007BFF;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+

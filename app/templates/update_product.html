@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Product - {{ product.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <h1>Update Product</h1>
+
+    <form action="{{ url_for('products.update_product', id=product.id) }}" method="POST" enctype="multipart/form-data">
+        <!-- CSRF token for security -->
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="{{ product.name }}" required><br>
+
+        <label for="description">Description:</label>
+        <input type="text" id="description" name="description" value="{{ product.description }}" required><br>
+
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" value="{{ product.price }}" step="0.01" required><br>
+
+        <label for="subcategory">Subcategory:</label>
+        <select id="subcategory" name="subcategory_name" required>
+            <option value="" disabled>Select Subcategory</option>
+            {% for subcategory in subcategories %}
+                <option value="{{ subcategory.name }}" {% if subcategory.name == product.subcategory.name %}selected{% endif %}>{{ subcategory.name }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="specifications">Specifications:</label>
+        <textarea id="specifications" name="specifications">{{ product.specifications }}</textarea><br>
+
+        <label for="image">Change Image (Optional):</label>
+        <input type="file" id="image" name="image" accept="image/*"><br>
+
+        <label for="discount">Discount:</label>
+        <input type="number" id="discount" name="discount" value="{{ product.discount }}" step="0.01"><br>
+
+        <button type="submit">Update Product</button>
+    </form>
+
+</body>
+</html>
