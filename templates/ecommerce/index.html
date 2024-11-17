@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='ecommerce/css/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Order Management System</h1>
+    </header>
+    <main>
+        <!-- Create Order Form -->
+        <h2>Create Order</h2>
+        <form id="create-order-form">
+            <label for="product_id">Product ID:</label>
+            <input type="number" id="product_id" name="product_id" required>
+            <label for="status">Status:</label>
+            <input type="text" id="status" name="status" value="Pending">
+            <label for="total_price">Total Price:</label>
+            <input type="number" id="total_price" name="total_price" step="0.01" required>
+            <button type="submit">Create Order</button>
+        </form>
+        <div class="result" id="create-order-result"></div>
+
+        <!-- Get Orders -->
+        <h2>Orders List</h2>
+        <button id="fetch-orders">Fetch All Orders</button>
+        <div class="orders-list" id="orders-list"></div>
+
+        <!-- Get Order by ID -->
+        <h2>Get Order by ID</h2>
+        <form id="get-order-form">
+            <label for="get_order_id">Order ID:</label>
+            <input type="number" id="get_order_id" name="get_order_id" required>
+            <button type="submit">Get Order</button>
+        </form>
+        <div class="result" id="get-order-result"></div>
+
+        <!-- Delete Order Section -->
+        <h2>Delete Order</h2>
+        <form id="delete-order-form">
+            <label for="delete_order_id">Order ID:</label>
+            <input type="number" id="delete_order_id" name="delete_order_id" required>
+            <button type="submit">Delete Order</button>
+        </form>
+        <div class="delete-result" id="delete-result"></div>
+
+        <!-- Generate Invoice -->
+        <h2>Generate Invoice</h2>
+        <form id="generate-invoice-form">
+            <label for="invoice_order_id">Order ID:</label>
+            <input type="number" id="invoice_order_id" name="invoice_order_id" required>
+            <button type="submit">Generate Invoice</button>
+        </form>
+        <div class="invoice-result" id="invoice-result"></div>
+
+        <!-- Create Return -->
+        <h2>Create Return</h2>
+        <form id="create-return-form">
+            <label for="return_order_id">Order ID:</label>
+            <input type="number" id="return_order_id" name="return_order_id" required>
+            <label for="reason">Reason:</label>
+            <input type="text" id="reason" name="reason" required>
+            <label for="new_product_id">New Product ID:</label>
+            <input type="number" id="new_product_id" name="new_product_id">
+            <label for="issued_refunds">Issued Refunds:</label>
+            <input type="checkbox" id="issued_refunds" name="issued_refunds">
+            <label for="offered_replacement">Offered Replacement:</label>
+            <input type="checkbox" id="offered_replacement" name="offered_replacement">
+            <button type="submit">Create Return</button>
+        </form>
+        <div class="return-result" id="create-return-result"></div>
+    </main>
+
+    <script>
+        const baseUrl = 'http://127.0.0.1:4000/api/orders';
+
+        // Create Order
+        document.getElementById('create-order-form').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const product_id = document.getElementById('product_id').value;
+            const status = document.getElementById('status').value;
+            const total_price = document.getElementById('total_price').value;
+
+            const response = await fetch(baseUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ product_id, status, total_price })
+            });
+            const result = await response.json();
+            document.getElementById('create-order-result').textContent = JSON.stringify(result, null, 2);
+        });
+
+        // Fetch All Orders
+        document.getElementById('fetch-orders').addEventListener('click', async function () {
+            const response = await fetch(baseUrl);
+            const orders = await response.json();
+            document.getElementById('orders-list').textContent = JSON.stringify(orders, null, 2);
+        });
+
+        // Get Order by ID
+        document.getElementById('get-order-form').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const order_id = document.getElementById('get_order_id').value;
+            const response = await fetch(`${baseUrl}/${order_id}`);
+            const result = await response.json();
+            document.getElementById('get-order-result').textContent = JSON.stringify(result, null, 2);
+        });
+
+        // Generate Invoice
+        document.getElementById('generate-invoice-form').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const order_id = document.getElementById('invoice_order_id').value;
+            const response = await fetch(`${baseUrl}/${order_id}/invoice`);
+            const result = await response.json();
+            document.getElementById('invoice-result').textContent = JSON.stringify(result, null, 2);
+        });
+
+        // Delete Order
+        document.getElementById('delete-order-form').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const order_id = document.getElementById('delete_order_id').value;
+            const response = await fetch(`${baseUrl}/${order_id}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const result = await response.json();
+            if (response.ok) {
+                document.getElementById('delete-result').textContent = JSON.stringify({ message: "Order deleted successfully" }, null, 2);
+            } else {
+                document.getElementById('delete-result').textContent = JSON.stringify({ error: "Order not found" }, null, 2);
+            }
+        });
+
+        // Create Return
+        document.getElementById('create-return-form').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const order_id = document.getElementById('return_order_id').value;
+            const reason = document.getElementById('reason').value;
+            const issued_refunds = document.getElementById('issued_refunds').checked;
+            const offered_replacement = document.getElementById('offered_replacement').checked;
+            let new_product_id = null;
+
+            if (offered_replacement) {
+                new_product_id = document.getElementById('new_product_id').value;
+                if (!new_product_id) {
+                    document.getElementById('create-return-result').textContent = JSON.stringify(
+                        { error: "New product ID is required for replacement" },
+                        null,
+                        2
+                    );
+                    return;
+                }
+            }
+
+            const response = await fetch('http://127.0.0.1:4000/api/returns', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ order_id, reason, issued_refunds, offered_replacement, new_product_id })
+            });
+
+            const result = await response.json();
+            document.getElementById('create-return-result').textContent = JSON.stringify(result, null, 2);
+        });
+
+        // Ensure "Issued Refunds" and "Offered Replacement" are mutually exclusive
+        document.getElementById('issued_refunds').addEventListener('change', function () {
+            if (this.checked) {
+                document.getElementById('offered_replacement').checked = false;
+            }
+        });
+
+        document.getElementById('offered_replacement').addEventListener('change', function () {
+            if (this.checked) {
+                document.getElementById('issued_refunds').checked = false;
+            }
+        });
+
+    </script>
+</body>
+</html>

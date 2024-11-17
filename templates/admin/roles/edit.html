@@ -1,0 +1,31 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+<h2>Edit Role</h2>
+<form method="post" action="{{ url_for('admin.edit_role', role_id=role.id) }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <p>
+        <label for="name">Name</label><br>
+        <input type="text" name="name" id="name" value="{{ role.name }}">
+    </p>
+
+    <p>
+        <label for="permissions">Permissions</label><br>
+        <select name="permissions" id="permissions" multiple>
+            {% for permission in permissions %}
+            <option value="{{ permission.id }}"
+                {% if permission in role.permissions %} selected {% endif %}>
+                {{ permission.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </p>
+
+    <p>
+        <button type="submit">Update Role</button>
+    </p>
+</form>
+
+<p><a href="{{ url_for('admin.list_roles') }}">Back to Role List</a></p>
+{% endblock %}

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='ecommerce/css/styles.css') }}">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Product Management</h1>
+  </header>
+  <main>
+    <!-- Add Product Buttons -->
+    <div class="add-product-button">
+      <a href="{{ url_for('ecommerce.add_product_form') }}">
+        <button>Add Product</button>
+      </a>
+      <a href="{{ url_for('ecommerce.bulk_upload_form') }}">
+        <button>Bulk Upload</button>
+      </a>
+    </div>
+
+    <!-- Filter Dropdowns -->
+    <label for="category">Category:</label>
+    <select id="category" name="category">
+      <option value="">All Categories</option>
+      {% for category in categories %}
+      <option value="{{ category.id }}">{{ category.name }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="subcategory">Subcategory:</label>
+    <select id="subcategory" name="subcategory">
+      <option value="">All Subcategories</option>
+      {% for subcategory in subcategories %}
+      <option value="{{ subcategory.id }}">{{ subcategory.name }}</option>
+      {% endfor %}
+    </select>
+
+    <!-- Products Table -->
+    <table border="1" id="products-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Price</th>
+          <th>Category</th>
+          <th>Subcategory</th>
+          <th>Specifications</th>
+          <th>Discount</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for product in products %}
+        <tr>
+          <td>{{ product.id }}</td>
+          <td><a href="{{ url_for('ecommerce.get_product', id=product.id) }}">{{ product.name }}</a></td>
+          <td>{{ product.description }}</td>
+          <td>{{ product.price }}</td>
+          <td>{{ product.category }}</td>
+          <td>{{ product.subcategory }}</td>
+          <td>{{ product.specifications }}</td>
+          <td>{{ product.discount }}</td>
+          <td>
+            <a href="{{ url_for('ecommerce.edit_product', id=product.id) }}">
+              <button>Edit</button>
+            </a>
+            <form action="{{ url_for('ecommerce.delete_product', id=product.id) }}" method="POST" style="display:inline;">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button type="submit" onclick="return confirm('Are you sure you want to delete this product?');">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+
+  <script>
+    $(document).ready(function () {
+      $('#category, #subcategory').on('change', function () {
+        const category = $('#category').val();
+        const subcategory = $('#subcategory').val();
+
+        $.ajax({
+          url: "{{ url_for('ecommerce.filter_products') }}",
+          type: "GET",
+          data: { category_id: category, subcategory_id: subcategory },
+          success: function (response) {
+            const tbody = $('#products-table tbody');
+            tbody.empty();
+            response.products.forEach(product => {
+              const row = `
+                <tr>
+                  <td>${product.id}</td>
+                  <td>${product.name}</td>
+                  <td>${product.description}</td>
+                  <td>${product.price}</td>
+                  <td>${product.category || 'N/A'}</td>
+                  <td>${product.subcategory || 'N/A'}</td>
+                  <td>${product.specifications}</td>
+                  <td>${product.discount}</td>
+                  <td>
+                    <a href="{{ url_for('ecommerce.edit_product', id=product.id) }}"><button>Edit</button></a>
+                    <form action="{{ url_for('ecommerce.delete_product', id=product.id) }}" method="POST" style="display:inline;">
+                      <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
+                  </td>
+                </tr>`;
+              tbody.append(row);
+            });
+          },
+          error: function () {
+            alert("Failed to filter products. Please try again.");
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
