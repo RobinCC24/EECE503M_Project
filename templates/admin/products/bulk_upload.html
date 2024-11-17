@@ -1,0 +1,13 @@
+{% extends 'admin/base.html' %}
+{% block title %}Bulk Upload Products{% endblock %}
+{% block content %}
+<h2>Bulk Upload Products</h2>
+<form method="post" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.file.label }}<br>
+        {{ form.file() }}
+    </p>
+    <p>{{ form.submit(class="btn btn-primary") }}</p>
+</form>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'admin/base.html' %}
+{% block title %}View Return{% endblock %}
+{% block content %}
+<h2>Return Details - Return #{{ return_item.id }}</h2>
+<p><strong>Order ID:</strong> {{ return_item.order_id }}</p>
+<p><strong>Product ID:</strong> {{ return_item.product_id }}</p>
+<p><strong>Status:</strong> {{ return_item.status }}</p>
+<p><strong>Reason:</strong> {{ return_item.reason }}</p>
+<p><strong>Issued Refunds:</strong> {{ 'Yes' if return_item.issued_refunds else 'No' }}</p>
+<p><strong>Offered Replacement:</strong> {{ 'Yes' if return_item.offered_replacement else 'No' }}</p>
+<p><strong>Return Date:</strong> {{ return_item.return_date.strftime('%Y-%m-%d') }}</p>
+{% endblock %}

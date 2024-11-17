@@ -1,0 +1,30 @@
+{% extends "admin/base.html" %}
+{% block content %}
+<h2>Add Inventory</h2>
+<form action="{{ url_for('inventory.add_inventory_entry') }}" method="POST">
+    {{ csrf_token() }}
+    <label for="product_id">Product:</label>
+    <select name="product_id" id="product_id" required>
+        {% for product in products %}
+            <option value="{{ product.id }}">{{ product.name }}</option>
+        {% endfor %}
+    </select>
+    <br><br>
+
+    <label for="warehouse_id">Warehouse:</label>
+    <select name="warehouse_id" id="warehouse_id" required>
+        {% for warehouse in warehouses %}
+            <option value="{{ warehouse.id }}">{{ warehouse.location }}</option>
+        {% endfor %}
+    </select>
+    <br><br>
+
+    <label for="quantity">Quantity:</label>
+    <input type="number" name="quantity" id="quantity" required>
+    <br><br>
+
+    <button type="submit">Add Inventory</button>
+</form>
+<br>
+<a href="{{ url_for('inventory.get_inventory') }}">Back to Inventory</a>
+{% endblock %}

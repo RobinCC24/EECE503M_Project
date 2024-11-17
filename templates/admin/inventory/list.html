@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory</title>
+</head>
+<body>
+    <h1>Inventory</h1>
+    <a href="{{ url_for('inventory.add_inventory_entry') }}">Add Inventory</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Warehouse</th>
+                <th>Quantity</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in inventory %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.warehouse.location }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>
+                        <a href="{{ url_for('inventory.update_inventory', inventory_id=item.id) }}">Update</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Inventory</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='ecommerce/css/styles.css') }}">
+</head>
+<body>
+  <div class="container mt-4">
+    <h1>Add New Inventory</h1>
+    <form method="POST" action="{{ url_for('ecommerce.add_inventory') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="mb-3">
+        <label for="product_id" class="form-label">Select Product</label>
+        <select class="form-control" id="product_id" name="product_id">
+          {% for product in products %}
+            <option value="{{ product.id }}">{{ product.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="warehouse_id" class="form-label">Select Warehouse</label>
+        <select class="form-control" id="warehouse_id" name="warehouse_id">
+          {% for warehouse in warehouses %}
+            <option value="{{ warehouse.id }}">{{ warehouse.location }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="quantity" class="form-label">Quantity</label>
+        <input type="number" class="form-control" id="quantity" name="quantity" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Add Inventory</button>
+    </form>
+  </div>
+</body>
+</html>

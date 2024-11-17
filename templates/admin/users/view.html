@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/css/style.css') }}">
+</head>
+<body>
+    <h1>User Details</h1>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <td>{{ user.id }}</td>
+        </tr>
+        <tr>
+            <th>Username</th>
+            <td>{{ user.username }}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ user.email }}</td>
+        </tr>
+        <tr>
+            <th>Role</th>
+            <td>{{ user.role.name if user.role else 'No Role Assigned' }}</td>
+        </tr>
+        <tr>
+            <th>Created At</th>
+            <td>{{ user.created_at }}</td> <!-- Replace with the actual field in your model -->
+        </tr>
+        <tr>
+            <th>Updated At</th>
+            <td>{{ user.updated_at }}</td> <!-- Replace with the actual field in your model -->
+        </tr>
+    </table>
+
+    <a href="{{ url_for('admin.list_users') }}">Back to Users List</a>
+</body>
+</html>

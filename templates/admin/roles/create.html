@@ -1,0 +1,18 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+<h2>Create New Role</h2>
+<form method="post">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.name.label }}<br>
+        {{ form.name(size=32) }}
+    </p>
+    <p>
+        {{ form.permissions.label }}<br>
+        {{ form.permissions(size=5, multiple=true) }}
+    </p>
+    <p>{{ form.submit(class="btn btn-primary") }}</p>
+</form>
+<p><a href="{{ url_for('admin.list_roles') }}">Back to Roles</a></p>
+{% endblock %}

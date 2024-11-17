@@ -1,0 +1,33 @@
+{% extends 'admin/base.html' %}
+{% block title %}Add Promotion{% endblock %}
+{% block content %}
+<h2>Add New Promotion</h2>
+<form method="post">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.name.label }}<br>
+        {{ form.name(size=64) }}
+    </p>
+    <p>
+        {{ form.discount_percent.label }}<br>
+        {{ form.discount_percent(step="0.01") }}
+    </p>
+    <p>
+        {{ form.start_date.label }}<br>
+        {{ form.start_date() }}
+    </p>
+    <p>
+        {{ form.end_date.label }}<br>
+        {{ form.end_date() }}
+    </p>
+    <p>
+        {{ form.user_tier.label }}<br>
+        {{ form.user_tier() }}
+    </p>
+    <p>
+        {{ form.product_ids.label }}<br>
+        {{ form.product_ids(multiple=True) }}
+    </p>
+    <p>{{ form.submit(class="btn btn-primary") }}</p>
+</form>
+{% endblock %}

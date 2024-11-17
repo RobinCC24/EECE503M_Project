@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit User</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/css/style.css') }}">
+</head>
+<body>
+    <h1>Edit User</h1>
+
+    <form action="{{ url_for('admin.edit_user', user_id=user.id) }}" method="POST">
+        <!-- CSRF Token -->
+        {{ form.hidden_tag() }}
+
+        <div>
+            <label for="username">Username:</label>
+            {{ form.username(class_="form-control") }}
+            {% if form.username.errors %}
+                <span class="text-danger">{{ form.username.errors[0] }}</span>
+            {% endif %}
+        </div>
+
+        <div>
+            <label for="email">Email:</label>
+            {{ form.email(class_="form-control") }}
+            {% if form.email.errors %}
+                <span class="text-danger">{{ form.email.errors[0] }}</span>
+            {% endif %}
+        </div>
+
+        <div>
+            <label for="role_id">Role:</label>
+            {{ form.role_id(class_="form-control") }}
+            {% if form.role_id.errors %}
+                <span class="text-danger">{{ form.role_id.errors[0] }}</span>
+            {% endif %}
+        </div>
+
+        <div>
+            <label for="password">Password (leave blank to keep current password):</label>
+            {{ form.password(class_="form-control") }}
+            {% if form.password.errors %}
+                <span class="text-danger">{{ form.password.errors[0] }}</span>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <a href="{{ url_for('admin.list_users') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</body>
+</html>

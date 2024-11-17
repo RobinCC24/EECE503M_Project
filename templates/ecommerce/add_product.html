@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Product</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='ecommerce/css/styles.css') }}">
+</head>
+<body>
+  <h1>Add New Product</h1>
+  <form action="{{ url_for('ecommerce.add_product') }}" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required><br>
+
+    <label for="description">Description:</label>
+    <input type="text" id="description" name="description" required><br>
+
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" step="0.01" required><br>
+
+    <label for="subcategory">Subcategory:</label>
+    <select id="subcategory" name="subcategory_name" required>
+        {% for subcategory in subcategories %}
+        <option value="{{ subcategory.name }}">{{ subcategory.name }}</option>
+        {% endfor %}
+    </select><br>
+
+    <label for="specifications">Specifications:</label>
+    <textarea id="specifications" name="specifications"></textarea><br>
+
+    <label for="image">Image:</label>
+    <input type="file" id="image" name="image" accept="image/*"><br>
+
+    <button type="submit">Add Product</button>
+  </form>
+</body>
+</html>

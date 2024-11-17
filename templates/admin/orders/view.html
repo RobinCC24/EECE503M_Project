@@ -1,0 +1,11 @@
+{% extends 'admin/base.html' %}
+{% block title %}View Order{% endblock %}
+{% block content %}
+<h2>Order Details - Order #{{ order.id }}</h2>
+<p><strong>Customer:</strong> {{ order.customer.name }}</p>
+<p><strong>Status:</strong> {{ order.status }}</p>
+<p><strong>Total Price:</strong> ${{ order.total_price }}</p>
+<p><strong>Order Date:</strong> {{ order.order_date.strftime('%Y-%m-%d') }}</p>
+<p><strong>Product ID:</strong> {{ order.product_id }}</p>
+<p><strong>Quantity:</strong> {{ order.quantity }}</p>
+{% endblock %}

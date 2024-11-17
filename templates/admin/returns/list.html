@@ -1,0 +1,30 @@
+{% extends 'admin/base.html' %}
+{% block title %}Returns{% endblock %}
+{% block content %}
+<h2>Returns</h2>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Order ID</th>
+            <th>Status</th>
+            <th>Return Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for return_item in returns %}
+        <tr>
+            <td>{{ return_item.id }}</td>
+            <td>{{ return_item.order_id }}</td>
+            <td>{{ return_item.status }}</td>
+            <td>{{ return_item.return_date.strftime('%Y-%m-%d') }}</td>
+            <td>
+                <a href="{{ url_for('admin.view_return', return_id=return_item.id) }}">View</a>
+                <a href="{{ url_for('admin.update_return', return_id=return_item.id) }}">Update</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

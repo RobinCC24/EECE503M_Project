@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory Report</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='ecommerce/css/styles.css') }}">
+</head>
+<body>
+  <div class="container mt-4">
+    <h1>Inventory Report</h1>
+
+    <div class="mb-3">
+      <a href="{{ url_for('ecommerce.inventory') }}" class="btn btn-secondary">Back to Inventory</a>
+    </div>
+
+    <!-- Category Summary Section -->
+    <h3 class="mt-4">Category Summary</h3>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Total Stock</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for category in report['category_summary'] %}
+        <tr>
+          <td>{{ category.category }}</td>
+          <td>{{ category.total_stock }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- Top Products Section -->
+    <h3 class="mt-4">Top 5 Popular Products</h3>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Stock</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for product in report['top_products'] %}
+        <tr>
+          <td>{{ product.product }}</td>
+          <td>{{ product.stock }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

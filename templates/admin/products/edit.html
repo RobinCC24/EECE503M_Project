@@ -1,0 +1,41 @@
+{% extends 'admin/base.html' %}
+{% block title %}Edit Product{% endblock %}
+{% block content %}
+<h2>Edit Product - {{ product.name }}</h2>
+<form method="post" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.name.label }}<br>
+        {{ form.name(value=product.name, size=64) }}
+    </p>
+    <p>
+        {{ form.description.label }}<br>
+        {{ form.description(value=product.description, rows=5, cols=60) }}
+    </p>
+    <p>
+        {{ form.price.label }}<br>
+        {{ form.price(value=product.price, step="0.01") }}
+    </p>
+    <p>
+        {{ form.category_id.label }}<br>
+        {{ form.category_id(default=product.subcategory.category_id if product.subcategory else None) }}
+    </p>
+    <p>
+        {{ form.subcategory_id.label }}<br>
+        {{ form.subcategory_id(default=product.subcategory_id) }}
+    </p>
+    <p>
+        {{ form.specifications.label }}<br>
+        {{ form.specifications(value=product.specifications, rows=5, cols=60) }}
+    </p>
+    <p>
+        {{ form.discount.label }}<br>
+        {{ form.discount(value=product.discount, step="0.01") }}
+    </p>
+    <p>
+        {{ form.image.label }}<br>
+        {{ form.image() }}
+    </p>
+    <p>{{ form.submit(class="btn btn-primary") }}</p>
+</form>
+{% endblock %}

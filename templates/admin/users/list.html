@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin/css/style.css') }}">
+</head>
+<body>
+    <h1>Users</h1>
+    <a href="{{ url_for('admin.dashboard') }}">Back to Dashboard</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.role.name if user.role else 'No Role Assigned' }}</td>
+                    <td>
+                        <a href="{{ url_for('admin.view_user', user_id=user.id) }}">View</a>
+                        <a href="{{ url_for('admin.edit_user', user_id=user.id) }}">Edit</a>
+                        <form action="{{ url_for('admin.delete_user', user_id=user.id) }}" method="post" style="display:inline;">
+                            <button type="submit" onclick="return confirm('Are you sure you want to delete this user?');">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">No users found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

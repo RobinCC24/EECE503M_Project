@@ -1,0 +1,13 @@
+{% extends 'admin/base.html' %}
+{% block title %}Update Order{% endblock %}
+{% block content %}
+<h2>Update Order - Order #{{ order.id }}</h2>
+<form method="post">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.status.label }}<br>
+        {{ form.status(default=order.status) }}
+    </p>
+    <p>{{ form.submit(class="btn btn-primary") }}</p>
+</form>
+{% endblock %}

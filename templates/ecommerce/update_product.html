@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Update Product</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='ecommerce/css/styles.css') }}">
+</head>
+<body>
+  <h1>Update Product</h1>
+
+  <form action="{{ url_for('ecommerce.update_product', id=product.id) }}" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" value="{{ product.name }}" required>
+    <label for="description">Description:</label>
+    <input type="text" id="description" name="description" value="{{ product.description }}" required>
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" value="{{ product.price }}" step="0.01" required>
+    <label for="subcategory">Subcategory:</label>
+    <select id="subcategory" name="subcategory">
+      {% for subcategory in subcategories %}
+      <option value="{{ subcategory.id }}" {% if product.subcategory_id == subcategory.id %}selected{% endif %}>
+        {{ subcategory.name }}
+      </option>
+      {% endfor %}
+    </select>
+    <button type="submit">Update Product</button>
+  </form>
+</body>
+</html>

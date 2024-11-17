@@ -1,0 +1,13 @@
+{% extends 'admin/base.html' %}
+{% block title %}Update Return{% endblock %}
+{% block content %}
+<h2>Update Return - Return #{{ return_item.id }}</h2>
+<form method="post">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.status.label }}<br>
+        {{ form.status(default=return_item.status) }}
+    </p>
+    <p>{{ form.submit(class="btn btn-primary") }}</p>
+</form>
+{% endblock %}

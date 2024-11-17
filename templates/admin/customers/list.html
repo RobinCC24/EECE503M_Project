@@ -1,0 +1,36 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+<h2>Customers</h2>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Membership Tier</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for customer in customers %}
+        <tr>
+            <td>{{ customer.id }}</td>
+            <td>{{ customer.name }}</td>
+            <td>{{ customer.email }}</td>
+            <td>{{ customer.phone }}</td>
+            <td>{{ customer.address }}</td>
+            <td>{{ customer.membership_tier }}</td>
+            <td>
+                <a href="{{ url_for('admin.view_customer', customer_id=customer.id) }}">View</a>
+                <form method="POST" action="{{ url_for('admin.delete_customer', customer_id=customer.id) }}" style="display:inline;">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

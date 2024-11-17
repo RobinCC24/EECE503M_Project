@@ -1,0 +1,21 @@
+{% extends 'admin/base.html' %}
+{% block title %}Inventory Report{% endblock %}
+{% block content %}
+<h2>Inventory Report</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Total Quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product_name, total_quantity in report_data %}
+        <tr>
+            <td>{{ product_name }}</td>
+            <td>{{ total_quantity }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
